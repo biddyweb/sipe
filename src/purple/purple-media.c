@@ -618,6 +618,23 @@ sipe_backend_media_get_active_remote_candidates(struct sipe_backend_media *media
 							 stream->participant);
 }
 
+void
+sipe_backend_media_set_encryption_keys(struct sipe_backend_media *media,
+				       struct sipe_backend_stream *stream,
+				       const guchar *encryption_key,
+				       const guchar *decryption_key)
+{
+	purple_media_set_encryption_parameters(media->m, stream->sessionid,
+			"aes-128-icm",
+			"hmac-sha1-80",
+			(gchar *)encryption_key, 30);
+	purple_media_set_decryption_parameters(media->m, stream->sessionid,
+			stream->participant,
+			"aes-128-icm",
+			"hmac-sha1-80",
+			(gchar *)decryption_key, 30);
+}
+
 const gchar *
 sipe_backend_stream_get_id(struct sipe_backend_stream *stream)
 {
