@@ -443,6 +443,18 @@ AS_IF([test "x$with_purple_vv" != xno],
 	[AC_DEFINE(HAVE_VV, 1, [Define if voice & video is enabled.])])
 AM_CONDITIONAL(SIPE_WITH_VV, [test "x$with_purple_vv" != xno])
 
+dnl check for freerdp and enable if we have VV
+ac_enable_freerdp=no
+PKG_CHECK_MODULES(FREERDP, [freerdp],
+	[AS_IF([test "x$with_purple_vv" != xno],
+		[ac_enable_freerdp=yes])],
+	[]
+)
+
+AM_CONDITIONAL(SIPE_FREERDP, [test "x$ac_enable_freerdp" = xyes])
+AS_IF([test "x$ac_enable_freerdp" = xyes],
+	[AC_DEFINE(HAVE_FREERDP, 1, [Define to 1 if you have FreeRDP headers.])])
+
 dnl these code parts rely on interfaces that require GValueArray. This
 dnl type has been declared "deprectated" in glib-2.0 >= 2.32.0, but there
 dnl is no backward compatible replacement implementation possible
